@@ -6,13 +6,16 @@ import Display from './components/Display'
 
 const App = () => {
   const [persons, setPersons] = useState([])
+  const [tempPersons, setTempPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [searching, setSearching] = useState(false)
 
   useEffect(() => {
-    phonebookService.getAll().then((res) => setPersons(res))
+    phonebookService.getAll().then((res) => {
+      setPersons(res)
+      setTempPersons(res)
+    })
   }, [])
 
   //
@@ -31,42 +34,39 @@ const App = () => {
     }
   }
 
-  const onChange = (e) => {
-    setNewName(e.target.value)
-  }
-
-  const onChange2 = (e) => {
-    setNewPhone(e.target.value)
-  }
-
   const onChangeSearch = (e) => {
     setSearchTerm(e.target.value)
-    if (searchTerm !== '') {
-      setSearching(true)
-    } else {
-      setSearching(false)
-    }
+
+    const x = persons.filter((person) => {
+      if (searchTerm === '') {
+        return person
+      } else if (person.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return person
+      }
+    })
+    setTempPersons(x)
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
       <Search onChangeSearch={onChangeSearch} searchTerm={searchTerm} />
       <br />
       <br />
       <br />
       <Form
         onSubmit={onSubmit}
-        onChange={onChange}
+        setNewName={setNewName}
+        setNewPhone={setNewPhone}
         newName={newName}
-        onChange2={onChange2}
         newPhone={newPhone}
       />
       <h2>Numbers</h2>
       <Display
-        persons={persons}
-        searching={searching}
-        searchTerm={searchTerm}
+        tempPersons={tempPersons}
+        // persons={persons}
+        // searching={searching}
+        // searchTerm={searchTerm}
       />
     </div>
   )
