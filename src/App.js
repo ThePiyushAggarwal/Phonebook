@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Search from './components/Search'
 import Form from './components/Form'
-import { v4 } from 'uuid'
+import phonebookService from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,9 +11,7 @@ const App = () => {
   const [searching, setSearching] = useState(false)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then((response) => setPersons(response.data))
+    phonebookService.getAll().then((res) => setPersons(res))
   }, [])
 
   //
@@ -23,9 +20,13 @@ const App = () => {
     if (persons.some((person) => person.name === newName.trim())) {
       window.alert(` ${newName.trim()} what the hell. You wanna fight biatch`)
     } else {
-      let newPerson = { name: newName.trim(), phone: newPhone, id: v4() }
+      let newPerson = { name: newName.trim(), phone: newPhone }
 
-      setPersons(persons.concat(newPerson))
+      phonebookService.create(newPerson).then((res) => {
+        setPersons(persons.concat(res))
+        setNewName('')
+        setNewPhone('')
+      })
     }
   }
 
@@ -39,7 +40,6 @@ const App = () => {
 
   const onChangeSearch = (e) => {
     setSearchTerm(e.target.value)
-
     if (searchTerm !== '') {
       setSearching(true)
     } else {
@@ -47,6 +47,7 @@ const App = () => {
     }
   }
 
+  // this displays the phonebook
   const display = () => {
     let currentPersons = null
     if (searching) {
@@ -59,7 +60,7 @@ const App = () => {
 
     return currentPersons.map((person) => (
       <>
-        <p key={v4()}>
+        <p key={person.id}>
           <strong>Name: </strong>
           {person.name}
           <br />
