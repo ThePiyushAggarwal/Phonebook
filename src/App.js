@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Form from './components/Form'
 import phonebookService from './services/phonebook'
+import Display from './components/Display'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -47,30 +48,6 @@ const App = () => {
     }
   }
 
-  // this displays the phonebook
-  const display = () => {
-    let currentPersons = null
-    if (searching) {
-      currentPersons = persons.filter((person) =>
-        person.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    } else {
-      currentPersons = [...persons]
-    }
-
-    return currentPersons.map((person) => (
-      <>
-        <p key={person.id}>
-          <strong>Name: </strong>
-          {person.name}
-          <br />
-          Phone <em>{person.phone}</em>
-        </p>
-        <hr />
-      </>
-    ))
-  }
-
   return (
     <div>
       <h2>Phonebook</h2>
@@ -86,7 +63,11 @@ const App = () => {
         newPhone={newPhone}
       />
       <h2>Numbers</h2>
-      {display()}
+      <Display
+        persons={persons}
+        searching={searching}
+        searchTerm={searchTerm}
+      />
     </div>
   )
 }
