@@ -6,8 +6,14 @@ const getAll = () => {
   return axios.get(baseUrl).then((response) => response.data)
 }
 
-const deleteShit = (id) => {
+const deleteIt = (id) => {
   return axios.delete(`${baseUrl}/${id}`).then((response) => response.data)
+}
+
+const update = (id, newPerson) => {
+  return axios
+    .put(`${baseUrl}/${id}`, newPerson)
+    .then((response) => response.data)
 }
 
 const create = (newPerson) => {
@@ -17,5 +23,6 @@ const create = (newPerson) => {
 export default {
   getAll,
   create,
-  deleteShit,
+  deleteIt,
+  update,
 }

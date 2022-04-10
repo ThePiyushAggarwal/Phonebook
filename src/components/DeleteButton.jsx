@@ -1,4 +1,4 @@
-function DeleteButton({ deleteThis }) {
+function DeleteButton({ del }) {
   return (
     <button
       style={{
@@ -7,7 +7,7 @@ function DeleteButton({ deleteThis }) {
         width: '60px',
         height: '40px',
       }}
-      onClick={deleteThis}
+      onClick={del}
     >
       Delete
     </button>

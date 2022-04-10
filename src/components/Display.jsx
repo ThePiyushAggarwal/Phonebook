@@ -1,19 +1,12 @@
 import DeleteButton from './DeleteButton'
-import phonebookService from '../services/phonebook'
 
-const Display = ({ tempPersons }) => {
+const Display = ({ name, phone, del }) => {
   return (
     <>
-      {tempPersons.map((person) => {
-        return (
-          <>
-            <h4>{person.name}</h4>
-            <p>{person.phone}</p>
-
-            <hr />
-          </>
-        )
-      })}
+      <h4>{name}</h4>
+      <p>{phone}</p>
+      <DeleteButton del={del} />
+      <hr />
     </>
   )
 }
