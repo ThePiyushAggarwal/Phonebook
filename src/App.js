@@ -6,7 +6,6 @@ import Display from './components/Display'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [tempPersons, setTempPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
@@ -14,9 +13,20 @@ const App = () => {
   useEffect(() => {
     phonebookService.getAll().then((res) => {
       setPersons(res)
-      setTempPersons(res)
     })
   }, [])
+
+  // THIS SEARCH THING TOOK A LOT OF MY TIME
+  const tempPersons =
+    searchTerm === ''
+      ? persons
+      : persons.filter((person) =>
+          person.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+
+  const onChangeSearch = (e) => {
+    setSearchTerm(e.target.value)
+  }
 
   //
   const onSubmit = (e) => {
@@ -34,25 +44,12 @@ const App = () => {
     }
   }
 
-  const onChangeSearch = (e) => {
-    setSearchTerm(e.target.value)
-
-    const x = persons.filter((person) => {
-      if (searchTerm === '') {
-        return person
-      } else if (person.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-        return person
-      }
-    })
-    setTempPersons(x)
-  }
-
   return (
     <div>
       <h1>Phonebook</h1>
       <Search onChangeSearch={onChangeSearch} searchTerm={searchTerm} />
       <br />
-      <br />
+
       <br />
       <Form
         onSubmit={onSubmit}
@@ -62,12 +59,7 @@ const App = () => {
         newPhone={newPhone}
       />
       <h2>Numbers</h2>
-      <Display
-        tempPersons={tempPersons}
-        // persons={persons}
-        // searching={searching}
-        // searchTerm={searchTerm}
-      />
+      <Display tempPersons={tempPersons} />
     </div>
   )
 }
