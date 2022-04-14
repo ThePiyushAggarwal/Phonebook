@@ -1,20 +1,22 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons'
 
 const getAll = () => {
-  return axios.get(baseUrl).then((response) => response.data)
+  return axios.get(baseUrl).then((response) => response.data.persons)
 }
 
 // DAMN!!!! THIS IS ONLY DELETING FROM THE TOP WHY???????
 const deleteIt = (id) => {
-  return axios.delete(`${baseUrl}/${id}`).then((response) => response.data)
+  return axios
+    .delete(`${baseUrl}/${id}`)
+    .then((response) => response.data.persons)
 }
 
 const update = (id, newPerson) => {
   return axios
     .put(`${baseUrl}/${id}`, newPerson)
-    .then((response) => response.data)
+    .then((response) => response.data.persons)
 }
 
 const create = (newPerson) => {
