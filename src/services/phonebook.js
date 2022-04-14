@@ -6,6 +6,7 @@ const getAll = () => {
   return axios.get(baseUrl).then((response) => response.data)
 }
 
+// DAMN!!!! THIS IS ONLY DELETING FROM THE TOP WHY???????
 const deleteIt = (id) => {
   return axios.delete(`${baseUrl}/${id}`).then((response) => response.data)
 }
